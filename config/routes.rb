@@ -1,6 +1,22 @@
 KisnetRails::Application.routes.draw do
+  get "users/show"
+
+  root :to => 'home#index'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
+
+  match '/auth/:provider/callback' => 'sessions#create'
+
+  match '/auth/failure' => 'sessions#failure'
+
+  match '/signout' => 'sessions#destroy', :as => :signout
+
+  match '/signin' => 'sessions#new', :as => :signin
+
+  match '/eventbrite_signin' => 'eventbrite#new', :as => :eventbrite_signin
+
+  match '/linkedin_retrieve' => 'linkedin#retrieve', :as => :linkedin_retrieve
 
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
