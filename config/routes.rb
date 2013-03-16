@@ -6,7 +6,17 @@ KisnetRails::Application.routes.draw do
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
+  match '/get_linkedin_data' => 'linkedin#get_linkedin_data'
+
+  match '/eventbrite_get_data' => 'eventbrite#get_data'
+
+  match '/eventbrite_authenticate' => 'eventbrite#authenticate'
+
+  match '/get_meetup_data' => 'meetup#get_meetup_data'
+  
   match '/auth/:provider/callback' => 'sessions#create'
+
+  match '/auth/callback' => 'linkedin#callback'
 
   match '/auth/failure' => 'sessions#failure'
 
@@ -14,9 +24,9 @@ KisnetRails::Application.routes.draw do
 
   match '/signin' => 'sessions#new', :as => :signin
 
-  match '/eventbrite_signin' => 'eventbrite#new', :as => :eventbrite_signin
+  # match '/eventbrite_signin' => 'eventbrite#new', :as => :eventbrite_signin
 
-  match '/linkedin_retrieve' => 'linkedin#retrieve', :as => :linkedin_retrieve
+  # match '/linkedin' => 'linkedin#retrieve', :as => :linkedin
 
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'

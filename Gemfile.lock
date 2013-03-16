@@ -30,6 +30,7 @@ GEM
       multi_json (~> 1.0)
     addressable (2.3.2)
     arel (3.0.2)
+    bcrypt-ruby (3.0.1)
     builder (3.0.4)
     capybara (2.0.2)
       mime-types (>= 1.16)
@@ -57,8 +58,16 @@ GEM
       cucumber (>= 1.1.8)
       nokogiri (>= 1.5.0)
     database_cleaner (0.9.1)
+    devise (2.2.3)
+      bcrypt-ruby (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (~> 3.1)
+      warden (~> 1.2.1)
     diff-lcs (1.1.3)
     erubis (2.7.0)
+    eventbrite-client (0.1.4)
+      httparty (~> 0.8.0)
+      tzinfo (~> 0.3.22)
     execjs (1.4.0)
       multi_json (~> 1.0)
     factory_girl (4.1.0)
@@ -73,6 +82,9 @@ GEM
       json (>= 1.4.6)
     hashie (1.2.0)
     hike (1.2.1)
+    httparty (0.8.3)
+      multi_json (~> 1.0)
+      multi_xml
     httpauth (0.2.0)
     i18n (0.6.1)
     journey (1.0.4)
@@ -84,6 +96,10 @@ GEM
       multi_json (>= 1.0)
     launchy (2.1.2)
       addressable (~> 2.3)
+    linkedin (0.3.7)
+      hashie (~> 1.2)
+      multi_json (~> 1.0)
+      oauth (~> 0.4)
     mail (2.4.4)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -100,6 +116,7 @@ GEM
       rspec (>= 2.9)
     moped (1.3.2)
     multi_json (1.5.0)
+    multi_xml (0.5.3)
     multipart-post (1.1.5)
     nokogiri (1.5.6)
     oauth (0.4.7)
@@ -123,7 +140,9 @@ GEM
       oauth2 (~> 0.8.0)
       omniauth (~> 1.0)
     origin (1.0.11)
+    orm_adapter (0.4.0)
     polyglot (0.3.3)
+    rMeetup (1.0)
     rack (1.4.4)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -184,10 +203,16 @@ GEM
     treetop (1.4.12)
       polyglot
       polyglot (>= 0.3.1)
+    twitter-bootstrap-rails (2.2.0)
+      actionpack (>= 3.1)
+      execjs
+      railties (>= 3.1)
     tzinfo (0.3.35)
     uglifier (1.3.0)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
+    warden (1.2.1)
+      rack (>= 1.0)
     websocket (1.0.6)
     xpath (1.0.0)
       nokogiri (~> 1.3)
@@ -200,15 +225,22 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   cucumber-rails (>= 1.3.0)
   database_cleaner (>= 0.8.0)
+  devise
+  eventbrite-client
   factory_girl_rails (>= 4.0.0)
   jquery-rails
+  json
   launchy (>= 2.1.2)
+  linkedin
   mongoid (>= 3.0.3)
   mongoid-rspec (>= 1.4.6)
+  oauth
   omniauth (>= 1.1.0)
   omniauth-eventbrite (~> 0.0.3)
   omniauth-linkedin
+  rMeetup
   rails (= 3.2.6)
   rspec-rails (>= 2.11.0)
   sass-rails (~> 3.2.3)
+  twitter-bootstrap-rails
   uglifier (>= 1.0.3)

@@ -27,3 +27,7 @@ end
 gem 'devise'
 gem 'linkedin'
 gem 'twitter-bootstrap-rails'
+gem 'oauth'
+gem 'json'
+gem 'rMeetup'
+gem 'eventbrite-client'

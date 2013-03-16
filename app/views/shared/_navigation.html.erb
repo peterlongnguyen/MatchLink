@@ -3,8 +3,11 @@
   Logged in as <%= current_user.name %>
   </li>
   <li>
-	<%= link_to('Get Linkedin Data', linkedin_retrieve_path)  %>
+	<%= link_to('Get Linkedin Data', get_linkedin_data_path)  %>
   </li>
+  <%= link_to('Authenticate and Get EventBrite Data', eventbrite_authenticate_path) %>
+  <li>
+  <%= link_to('Get Meetup Data', get_meetup_data_path) %>
   <li>
   <%= link_to('Linkedin Logout', signout_path) %>
   </li>
@@ -13,6 +16,3 @@
   <%= link_to('Linkedin Login', signin_path)  %>
   </li>
 <% end %>
-<li>
-<%= link_to('EventBrite Login', eventbrite_signin_path)  %>
-</li>
