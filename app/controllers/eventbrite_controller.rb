@@ -12,11 +12,6 @@ class EventbriteController < ApplicationController
 
   def get_data
   	access_code = extract_access_code_from_link()
-    puts "ACCESS CODE: " + access_code
-
-    puts "EVENTBRITE_CLIENT_SECRET: " + EVENTBRITE_CLIENT_SECRET
-   # @client_secret = 'MNRJ5RQEINNFEDNIYWASLPYNDGOFM7KCJES5JC74S7Y46N3TNA'
-   # @api_key = 'PZFDCKP3ARMFISBEUW'
 
     # once user allows access, exchange for access token
     access_token_JSON = exchange_code_for_token( access_code ) 
@@ -27,10 +22,7 @@ class EventbriteController < ApplicationController
     # get array of event ids the logged in user is currently attending
     response = get_event_ids( eventbrite_client )
     event_ids = parse_event_ids( response.body )
-
-  	event_ids.each do |event_id|
-  		get_attendees(event_id)
-  	end
+    print_all_events_attendees( event_ids )
     
     redirect_to root_url
   end
@@ -46,6 +38,7 @@ class EventbriteController < ApplicationController
     parsed_JSON = JSON.parse( json )
     access_token = parsed_JSON["access_token"]
   end
+
 
   def exchange_code_for_token(access_code)
     uri = URI.parse("https://www.eventbrite.com/oauth/token")
@@ -97,10 +90,10 @@ class EventbriteController < ApplicationController
     end
   end
 
-  def get_attendees_loop( event_ids )
-  	event_ids.each do |event_id|
+  def print_all_events_attendees( event_ids )
+  	event_ids.each do | event_id |
   		attendees = get_attendees( event_id )
-    	puts attendees.body
+    	puts "attendees: " + attendees.to_s()
   	end
   end
 

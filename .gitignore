@@ -15,4 +15,4 @@
 /tmp
 
 # ignore linkedin api secret/key
-config/initializers/omniauth.rb
+./environment.rb
