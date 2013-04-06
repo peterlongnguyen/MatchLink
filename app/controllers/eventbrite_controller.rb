@@ -38,8 +38,8 @@ class EventbriteController < ApplicationController
   	access_code = uri.query.split('&')[0].split('=')[1]
   end
 
-  def parse_for_access_token(json)
-    parsed_JSON = JSON.parse(json)
+  def parse_for_access_token( json )
+    parsed_JSON = JSON.parse( json )
     access_token = parsed_JSON["access_token"]
   end
 
@@ -87,8 +87,7 @@ class EventbriteController < ApplicationController
     rescue StandardError
     	false
     else
-    	attendees_parsed = JSON.parse( attendees.body )
-    	puts attendees.body
+      attendees	
     ensure
     	# do nothing
     end
@@ -97,7 +96,6 @@ class EventbriteController < ApplicationController
   def get_attendees_loop( event_ids )
   	event_ids.each do |event_id|
   		attendees = get_attendees( event_id )
-    	attendees_parsed = JSON.parse( attendees.body )
     	puts attendees.body
   	end
   end
