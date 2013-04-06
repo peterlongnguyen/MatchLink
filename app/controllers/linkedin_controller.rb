@@ -6,7 +6,6 @@ class LinkedinController < ApplicationController
   def get_linkedin_data
     # Fill the keys and secrets you retrieved after registering your app
     api_key = 'r62cojgm913h'
-    api_secret = 'tys0ddHMPhmPWTW3'
     # user_token = '198b2c05-b22c-43b7-8533-08c28c4fbce6'
     # user_secret = 'f7d4875d-636a-45bd-bf1d-51d7d48c940b'
 
@@ -73,5 +72,6 @@ class LinkedinController < ApplicationController
     
     redirect_to root_url, :notice => 'Signed out!'
   end
+
 
 end
