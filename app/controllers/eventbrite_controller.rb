@@ -3,10 +3,10 @@ require 'json'
 require 'uri'
 require "net/http"
 
-env_file = './environment.rb'
+env_file = Rails.root().to_s + '/environment.rb'
 require env_file if File.file? env_file
 EVENTBRITE_CLIENT_SECRET ||= '.'
-EVENTBRITE_API_KEY ||= '.'
+EVENTBRITE_CLIENT_ID ||= '.'
 
 class EventbriteController < ApplicationController
 
@@ -14,8 +14,9 @@ class EventbriteController < ApplicationController
   	access_code = extract_access_code_from_link()
     puts "ACCESS CODE: " + access_code
 
-    @client_secret = 'MNRJ5RQEINNFEDNIYWASLPYNDGOFM7KCJES5JC74S7Y46N3TNA'
-    @api_key = 'PZFDCKP3ARMFISBEUW'
+    puts "EVENTBRITE_CLIENT_SECRET: " + EVENTBRITE_CLIENT_SECRET
+   # @client_secret = 'MNRJ5RQEINNFEDNIYWASLPYNDGOFM7KCJES5JC74S7Y46N3TNA'
+   # @api_key = 'PZFDCKP3ARMFISBEUW'
 
     # once user allows access, exchange for access token
     access_token_JSON = exchange_code_for_token( access_code ) 
@@ -31,8 +32,6 @@ class EventbriteController < ApplicationController
   		get_attendees(event_id)
   	end
     
-    puts response.body
-
     redirect_to root_url
   end
 
@@ -58,8 +57,8 @@ class EventbriteController < ApplicationController
     request = Net::HTTP::Post.new( uri.request_uri )
     request.set_form_data({
       "code" => access_code, 
-      "client_secret" => "MNRJ5RQEINNFEDNIYWASLPYNDGOFM7KCJES5JC74S7Y46N3TNA", 
-      "client_id" => "PZFDCKP3ARMFISBEUW", 
+      "client_secret" => EVENTBRITE_CLIENT_SECRET,
+      "client_id" => EVENTBRITE_CLIENT_ID,
       "grant_type" => "authorization_code"
     })
     
