@@ -3,6 +3,11 @@ require 'json'
 require 'uri'
 require "net/http"
 
+env_file = './environment.rb'
+require env_file if File.file? env_file
+EVENTBRITE_CLIENT_SECRET ||= '.'
+EVENTBRITE_API_KEY ||= '.'
+
 class EventbriteController < ApplicationController
 
   def get_data
