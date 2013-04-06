@@ -61,5 +61,8 @@ module KisnetRails
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+    
+    # Autoload lib/ folder including all subdirectories
+    # config.autoload_paths += Dir["#{config.root}/lib/**/"]
   end
 end

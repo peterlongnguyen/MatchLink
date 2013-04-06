@@ -1,7 +1,9 @@
 require 'eventbrite-client'
 require 'json'
 require 'uri'
-require "net/http"
+require 'net/http'
+
+require 'util'
 
 env_file = Rails.root().to_s + '/environment.rb'
 require env_file if File.file? env_file
@@ -10,7 +12,10 @@ EVENTBRITE_CLIENT_ID ||= '.'
 
 class EventbriteController < ApplicationController
 
+  include Util
+
   def get_data
+    # eventbrite embeds access code in the link it "returns"
   	access_code = extract_access_code_from_link()
 
     # once user allows access, exchange for access token
@@ -21,7 +26,8 @@ class EventbriteController < ApplicationController
 
     # get array of event ids the logged in user is currently attending
     response = get_event_ids( eventbrite_client )
-    event_ids = parse_event_ids( response.body )
+    event_ids = parse_for_event_ids( response.body )
+
     print_all_events_attendees( event_ids )
     
     redirect_to root_url
@@ -38,7 +44,6 @@ class EventbriteController < ApplicationController
     parsed_JSON = JSON.parse( json )
     access_token = parsed_JSON["access_token"]
   end
-
 
   def exchange_code_for_token(access_code)
     uri = URI.parse("https://www.eventbrite.com/oauth/token")
@@ -63,19 +68,23 @@ class EventbriteController < ApplicationController
   	return eventbrite_client.user_list_tickets()
   end
 
+  def get_event_details( event_id )
+    return  eb_client.event_get({ id: event_id }) 
+  end
+
   # returns array of event id's user has bought tickets to
-  def parse_event_ids( json )
-  	arr = Array.new
+  def parse_for_event_ids( json )
+  	id_list = Array.new
 
   	parsed = JSON.parse( json )
   	orders = parsed["user_tickets"][1]["orders"]
 
   	orders.each do |item| 
       id = item["order"]["event"]["id"]
-      arr.push(id)
+      id_list.push(id)
     end
 
-    return arr;
+    return id_list;
   end
 
   def get_attendees( event_id )
@@ -93,7 +102,12 @@ class EventbriteController < ApplicationController
   def print_all_events_attendees( event_ids )
   	event_ids.each do | event_id |
   		attendees = get_attendees( event_id )
-    	puts "attendees: " + attendees.to_s()
+
+      if is_of_type_bool( attendees ) 
+        puts "event_id: " + event_id.to_s() + " has hidden their attendees list!"
+      else
+        puts "attendees: " + attendees.to_s()
+      end
   	end
   end
 
