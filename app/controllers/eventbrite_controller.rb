@@ -14,6 +14,20 @@ class EventbriteController < ApplicationController
 
   include Util
 
+  @@eventbrite_client
+
+  def get_eventbrite_client
+    unless @@eventbrite_client.nil?
+      return @@eventbrite_client
+    else
+      raise 'using uninitialized eventbrite_client'
+    end
+  end
+
+  def set_eventbrite_client( eb_client )
+    @@eventbrite_client = eb_client
+  end
+
   def get_data
     # eventbrite embeds access code in the link it "returns"
   	access_code = extract_access_code_from_link()
@@ -22,17 +36,16 @@ class EventbriteController < ApplicationController
     access_token_JSON = exchange_code_for_token( access_code ) 
     access_token = parse_for_access_token( access_token_JSON )
     
-    eventbrite_client = EventbriteClient.new({ access_token: access_token })
+    @@eventbrite_client = EventbriteClient.new({ access_token: access_token })
 
     # get array of event ids the logged in user is currently attending
-    response = get_event_ids( eventbrite_client )
+    response = get_event_ids()
     event_ids = parse_for_event_ids( response.body )
 
     print_all_events_attendees( event_ids )
     
     redirect_to root_url
   end
-
 
   # extract access code returned in link parameters
   def extract_access_code_from_link
@@ -64,12 +77,12 @@ class EventbriteController < ApplicationController
     response_body = response.body 
   end
 
-  def get_event_ids( eventbrite_client )
-  	return eventbrite_client.user_list_tickets()
+  def get_event_ids
+  	return @@eventbrite_client.user_list_tickets()
   end
 
   def get_event_details( event_id )
-    return  eb_client.event_get({ id: event_id }) 
+    return  @@eventbrite_client.event_get({ id: event_id }) 
   end
 
   # returns array of event id's user has bought tickets to
@@ -89,7 +102,7 @@ class EventbriteController < ApplicationController
 
   def get_attendees( event_id )
   	begin
-    	attendees = @eb_client.event_list_attendees({ id: event_id })
+    	attendees = @@eventbrite_client.event_list_attendees({ id: event_id })
     rescue StandardError
     	false
     else
@@ -102,11 +115,12 @@ class EventbriteController < ApplicationController
   def print_all_events_attendees( event_ids )
   	event_ids.each do | event_id |
   		attendees = get_attendees( event_id )
-
+      
+      puts "event: " + get_event_details( event_id ).to_json()
       if is_of_type_bool( attendees ) 
-        puts "event_id: " + event_id.to_s() + " has hidden their attendees list!"
+        # puts "event_id: " + event_id.to_s() + " has hidden their attendees list!"
       else
-        puts "attendees: " + attendees.to_s()
+        puts "attendees: " + attendees.to_json()
       end
   	end
   end
