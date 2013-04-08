@@ -24,8 +24,8 @@ class EventbriteController < ApplicationController
     end
   end
 
-  def set_eventbrite_client( eb_client )
-    @@eventbrite_client = eb_client
+  def initialize_eventbrite_client( access_token )
+    @@eventbrite_client = EventbriteClient.new({ access_token: access_token })
   end
 
   def get_data
@@ -36,7 +36,8 @@ class EventbriteController < ApplicationController
     access_token_JSON = exchange_code_for_token( access_code ) 
     access_token = parse_for_access_token( access_token_JSON )
     
-    @@eventbrite_client = EventbriteClient.new({ access_token: access_token })
+    # need access token to begin making user calls in eventbrite client
+    initialize_eventbrite_client( access_token )
 
     # get array of event ids the logged in user is currently attending
     response = get_event_ids()
@@ -78,11 +79,11 @@ class EventbriteController < ApplicationController
   end
 
   def get_event_ids
-  	return @@eventbrite_client.user_list_tickets()
+  	return get_eventbrite_client().user_list_tickets()
   end
 
   def get_event_details( event_id )
-    return  @@eventbrite_client.event_get({ id: event_id }) 
+    return  get_eventbrite_client().event_get({ id: event_id }) 
   end
 
   # returns array of event id's user has bought tickets to
@@ -102,7 +103,7 @@ class EventbriteController < ApplicationController
 
   def get_attendees( event_id )
   	begin
-    	attendees = @@eventbrite_client.event_list_attendees({ id: event_id })
+    	attendees = get_eventbrite_client().event_list_attendees({ id: event_id })
     rescue StandardError
     	false
     else
