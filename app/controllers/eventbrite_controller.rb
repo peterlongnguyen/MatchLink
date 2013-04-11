@@ -59,7 +59,7 @@ class EventbriteController < ApplicationController
     access_token = parsed_JSON["access_token"]
   end
 
-  def exchange_code_for_token(access_code)
+  def exchange_code_for_token( access_code )
     uri = URI.parse("https://www.eventbrite.com/oauth/token")
 
     http = Net::HTTP.new( uri.host, uri.port )
