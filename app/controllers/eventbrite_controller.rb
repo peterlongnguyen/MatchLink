@@ -29,14 +29,9 @@ class EventbriteController < ApplicationController
   end
 
   def get_data
-    
-    # eventbrite embeds access code in the link it "returns"
-  	access_code = extract_access_code_from_link()
-
-    # once user allows access, exchange for access token
-    access_token_JSON = exchange_code_for_token( access_code ) 
-    access_token = parse_for_access_token( access_token_JSON )
-    
+    # retrieve from database or get new one from API
+    access_token = get_access_token()
+ 
     # need access token to begin making user calls in eventbrite client
     initialize_eventbrite_client( access_token )
 
@@ -49,12 +44,32 @@ class EventbriteController < ApplicationController
     redirect_to root_url
   end
 
+  def get_access_token()
+    if( has_access_token() )
+      return get_access_token_from_database()
+    else
+      redirect_to "https://www.eventbrite.com/oauth/authorize?response_type=code&client_id=PZFDCKP3ARMFISBEUW&redirect_uri=http://localhost:3000/eventbrite_get_access_token_from_API"
+    end
+  end
+
+  def get_access_token_from_database()
+     return current_user.eventbrite_access_token
+  end
+
   def has_access_token()
     return current_user.eventbrite_access_token?  
   end
 
-  def get_access_token()
+  ##### get access token from API for first login #####
 
+  def get_access_token_from_API()
+    # eventbrite embeds access code in the link it "returns"
+  	access_code = extract_access_code_from_link()
+
+    # once user allows access, exchange for access token
+    access_token_JSON = exchange_code_for_token( access_code ) 
+    access_token = parse_for_access_token( access_token_JSON )
+    return access_token
   end
 
   # extract access code returned in link parameters
@@ -86,6 +101,8 @@ class EventbriteController < ApplicationController
     response = http.request( request )
     response_body = response.body 
   end
+
+  #####################################################
 
   def get_event_ids
   	return get_eventbrite_client().user_list_tickets()
@@ -136,7 +153,7 @@ class EventbriteController < ApplicationController
   end
 
   def authenticate
-  	redirect_to "https://www.eventbrite.com/oauth/authorize?response_type=code&client_id=PZFDCKP3ARMFISBEUW&redirect_uri=http://localhost:3000/eventbrite_get_data"
+    get_data()
   end
 
 end
