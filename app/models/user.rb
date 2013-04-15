@@ -10,8 +10,9 @@ class User
   field :eventbrite_id, type: String
   field :linkedin_token, type: String
   field :linkedin_secret, type: String
+  field :eventbrite_access_token, type: String
 
-  attr_protected :provider, :uid, :name, :email, :linkedin_id, :eventbrite_id, :linkedin_secret, :linkedin_token
+  attr_protected :provider, :uid, :name, :email, :linkedin_id, :eventbrite_id, :linkedin_secret, :linkedin_token, :eventbrite_access_token
 
   validates :provider, :presence => true
   validates :uid, :presence => true

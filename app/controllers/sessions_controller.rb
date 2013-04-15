@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
 	                    :uid => auth['uid']).first || User.create_with_omniauth(auth)
 
 	  user.linkedin_token = auth['credentials']['token']
-      user.linkedin_secret = auth['credentials']['secret']
+    user.linkedin_secret = auth['credentials']['secret']
 
 	  session[:user_id] = user.id
 	  redirect_to root_url, :notice => "Signed in!"

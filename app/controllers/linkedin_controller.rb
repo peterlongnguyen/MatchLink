@@ -1,15 +1,15 @@
 require 'linkedin'
 require 'oauth'
 
+env_file = Rails.root().to_s + '/environment.rb'
+require env_file if File.file? env_file
+LINKEDIN_API_KEY ||= '.'
+LINKEDIN_SECRET_KEY ||= '.'
+
 class LinkedinController < ApplicationController
 
   def get_linkedin_data
-    # Fill the keys and secrets you retrieved after registering your app
-    api_key = 'r62cojgm913h'
-    # user_token = '198b2c05-b22c-43b7-8533-08c28c4fbce6'
-    # user_secret = 'f7d4875d-636a-45bd-bf1d-51d7d48c940b'
-
-    user = User.find(current_user.id)
+    #user = User.find( current_user.id )
     user_token = current_user.linkedin_token
     user_secret = current_user.linkedin_secret
 
@@ -28,7 +28,7 @@ class LinkedinController < ApplicationController
     }
      
     # Use your API key and secret to instantiate consumer object
-    consumer = OAuth::Consumer.new(api_key, api_secret, configuration)
+    consumer = OAuth::Consumer.new(LINKEDIN_API_KEY, LINKEDIN_SECRET_KEY, configuration)
      
     # Use your developer token and secret to instantiate access token object
     access_token = OAuth::AccessToken.new(consumer, user_token, user_secret)
@@ -44,12 +44,8 @@ class LinkedinController < ApplicationController
     redirect_to root_url
   end
 
-  def logout
-    # Fill the keys and secrets you retrieved after registering your app
-    api_key = 'r62cojgm913h'
-    api_secret = 'tys0ddHMPhmPWTW3'
-    
-    user = User.find(current_user.id)
+  def logout  
+    #user = User.find(current_user.id)
     user_token = current_user.linkedin_token
     user_secret = current_user.linkedin_secret
      
@@ -61,7 +57,7 @@ class LinkedinController < ApplicationController
       :access_token_path => '/uas/oauth/accessToken'
     }
      
-    consumer = OAuth::Consumer.new(api_key, api_secret, configuration)
+    consumer = OAuth::Consumer.new(LINKEDIN_API_KEY, LINKEDIN_SECRET_KEY, configuration)
     access_token = OAuth::AccessToken.new(consumer, user_token, user_secret)
         
     # By default, the LinkedIn API responses are in XML format. If you prefer JSON, simply specify the format in your call

@@ -29,6 +29,7 @@ class EventbriteController < ApplicationController
   end
 
   def get_data
+    
     # eventbrite embeds access code in the link it "returns"
   	access_code = extract_access_code_from_link()
 
@@ -46,6 +47,14 @@ class EventbriteController < ApplicationController
     print_all_events_attendees( event_ids )
     
     redirect_to root_url
+  end
+
+  def has_access_token()
+    return current_user.eventbrite_access_token?  
+  end
+
+  def get_access_token()
+
   end
 
   # extract access code returned in link parameters
@@ -117,7 +126,7 @@ class EventbriteController < ApplicationController
   	event_ids.each do | event_id |
   		attendees = get_attendees( event_id )
       
-      puts "event: " + get_event_details( event_id ).to_json()
+      puts "event: " + JSON.pretty_generate( get_event_details( event_id ) )
       if is_of_type_bool( attendees ) 
         # puts "event_id: " + event_id.to_s() + " has hidden their attendees list!"
       else
